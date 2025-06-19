@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="https://cdn-icons-png.flaticon.com/512/7212/7212644.png">
+    <title>
+        {% block titulo %}
+            Mi Sitio Web Moderno
+        {% endblock %}
+    </title>
+
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2ecc71;
+            --text-color: #333;
+            --light-text-color: #f4f4f4;
+            --background-color: #ecf0f1;
+            --header-bg-color: #2c3e50;
+            --nav-link-hover: #1abc9c;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s ease;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--header-bg-color);
+            color: var(--light-text-color);
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+            color: var(--light-text-color);
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--light-text-color);
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 5px 10px;
+            transition: color var(--transition-speed), background-color var(--transition-speed);
+            border-radius: var(--border-radius);
+        }
+
+        nav ul li a:hover,
+        nav ul li a.active {
+            color: var(--header-bg-color);
+            background-color: var(--nav-link-hover);
+        }
+
+        main {
+            padding: 40px 0;
+        }
+
+        .content-section {
+            background-color: #fff;
+            padding: 30px;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .content-section h2 {
+            color: var(--text-color);
+            margin-top: 0;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #e9e9e9;
+        }
+
+        img {
+            border-radius: 4px;
+            transition: transform 0.2s;
+        }
+
+        img:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            background-color: var(--header-bg-color);
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 50px;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 10px 0;
+            }
+        }
+    </style>
+    {% block css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Bienvenido a Nuestro Sitio</h1>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'index' %}" class="active">Home</a></li>
+                    <li><a href="{% url 'lista_productos' %}">Productos</a></li>
+                    <li><a href="{% url 'categorias' %}">Categorias</a></li>
+                    <li><a href="{% url 'marcas' %}">Marcas</a></li>
+                    <li><a href="{% url 'proveedores' %}">Proveedores</a></li>
+                    <li><a href="#">Contacto</a></li>
+                    {% if user.is_authenticated %}
+                        
+                        <li><a href="{% url 'lista_usuarios' %}">Lista de Usuarios</a></li>
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'login' %}">Login</a></li>
+                        <li><a href="{% url 'registro' %}">Registrarse</a></li>
+                    {% endif %}
+                    
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        {% block contenido %}
+        
+        {% endblock %}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Mi Sitio Web. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname;
+            const navLinks = document.querySelectorAll('nav ul li a');
+
+            navLinks.forEach(link => {
+                if (link.getAttribute('href') === '#') {
+                    // Solo para demostración
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    console.log('Navegando a: ' + this.textContent);
+                });
+            });
+        });
+    </script>
+    {% block js %}{% endblock %}
+</body>
+</html>
